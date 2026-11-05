@@ -1,6 +1,6 @@
 //! Authorize.net Accept Hosted: getHostedPaymentPageRequest, webhook, refund.
-use pelty_payments::http::{api_base, send_json, HttpRequestSpec};
 use pelty_core::money::Money;
+use pelty_payments::http::{api_base, send_json, HttpRequestSpec};
 use pelty_payments::*;
 use serde_json::{json, Value};
 use std::sync::Arc;
@@ -133,8 +133,7 @@ impl PaymentGateway for AuthorizeNetGateway {
         body: &[u8],
         _now: i64,
     ) -> Result<WebhookEvent, GatewayError> {
-        let v: Value =
-            serde_json::from_slice(body).map_err(|_| GatewayError::MalformedPayload)?;
+        let v: Value = serde_json::from_slice(body).map_err(|_| GatewayError::MalformedPayload)?;
         let event = v["eventType"].as_str().unwrap_or("unknown").to_string();
         let payload = &v["payload"];
         let id = payload["id"]
